@@ -74,13 +74,13 @@ public class PickupView {
 
 			mSpriteBatch.draw(
 					lPickup.srcX, lPickup.srcY, lPickup.srcW, lPickup.srcH, 
-					lPickup.x, lPickup.y, 0.2f, lPickup.dstW, lPickup.dstH, 
+					lPickup.xx, lPickup.yy, 0.2f, lPickup.dstW, lPickup.dstH, 
 					1f, 
 					mEntityTexture);
 			
 
 			if (DRAW_COLLS)
-				mCircleBatch.draw(lPickup.x, lPickup.y, lPickup.radius, 3f);
+				mCircleBatch.draw(lPickup.xx, lPickup.yy, lPickup.radius, 3f);
 
 		}
 

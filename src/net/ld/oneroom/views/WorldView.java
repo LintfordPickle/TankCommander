@@ -109,7 +109,7 @@ public class WorldView {
 
 		// Render spawn points
 		mSpriteBatch.begin(pRenderState.gameCamera());
-		mSpriteBatch.draw(0, 32, 128, 96, 64, 64, 1.5f, 128, 96, 2f, mWorldTexture);
+		// mSpriteBatch.draw(0, 32, 128, 96, 64, 64, 1.5f, 128, 96, 2f, mWorldTexture);
 		mSpriteBatch.end();
 	}
 

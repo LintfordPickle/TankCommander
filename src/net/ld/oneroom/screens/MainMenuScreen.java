@@ -2,6 +2,10 @@ package net.ld.oneroom.screens;
 
 import net.ld.library.core.graphics.ResourceManager;
 import net.ld.library.core.graphics.fonts.FontUnit;
+import net.ld.library.core.graphics.texturebatch.TextureBatch;
+import net.ld.library.core.graphics.textures.Texture;
+import net.ld.library.core.graphics.textures.TextureManager;
+import net.ld.library.core.maths.Rectangle;
 import net.ld.library.core.rendering.RenderState;
 import net.ld.library.screenmanager.LoadingScreen;
 import net.ld.library.screenmanager.MenuScreen;
@@ -18,18 +22,20 @@ public class MainMenuScreen extends MenuScreen {
 	private static final int CREDITS_BUTTON_ID = 2;
 	private static final int EXIT_BUTTON_ID = 3;
 
-	
 	private FontUnit mCreditsFont;
-	
+
+	private TextureBatch mTextureBatch;
+	private Texture mTitleLogoTexture;
+
 	// ---------------------------------------------
 	// Constructor
 	// ---------------------------------------------
 
 	public MainMenuScreen(ScreenManager pScreenManager) {
-		super(pScreenManager, "Main Menu");
+		super(pScreenManager, "");
 
 		mESCBackEnabled = false;
-		
+
 		MenuEntry lStartButton = new MenuEntry(mScreenManager, this, "Play");
 		MenuEntry lCreditsButton = new MenuEntry(mScreenManager, this, "Credits");
 		MenuEntry lExitButton = new MenuEntry(mScreenManager, this, "Exit");
@@ -42,6 +48,8 @@ public class MainMenuScreen extends MenuScreen {
 		menuEntries().add(lCreditsButton);
 		menuEntries().add(lExitButton);
 
+		mTextureBatch = new TextureBatch();
+
 	}
 
 	// ---------------------------------------------
@@ -51,31 +59,42 @@ public class MainMenuScreen extends MenuScreen {
 	@Override
 	public void loadGLContent(ResourceManager pResourceManager) {
 		super.loadGLContent(pResourceManager);
-		
-		mCreditsFont = pResourceManager.fontManager().loadFontFromResource("CreditsFont", "/res/fonts/pixel.ttf", 25);
+
+		mCreditsFont = pResourceManager.fontManager().loadFontFromFile("default", "res/fonts/Germania.otf", 28);
+
+		mTitleLogoTexture = TextureManager.textureManager().loadTextureFromFile("TitleLogo", "res/textures/titleLogo.png");
+		mTextureBatch.loadGLContent(pResourceManager);
+
 	}
 
 	@Override
 	public void unloadGLContent() {
 		super.unloadGLContent();
-		
+
 		mCreditsFont.unloadGLContent();
-		
+		mTextureBatch.unloadGLContent();
+
 	}
 
 	@Override
 	public void draw(RenderState pRenderState) {
 		super.draw(pRenderState);
-		
+
+		mEntryOffsetFromTop = 200f;
+
 		mCreditsFont.begin(pRenderState.hudCamera());
 
-		final String mLine0 = "Tank Commander LD";
-		final String mLine1 = "Created by John Hampson (2016) for Ludum Dare #37";
-		
-		final float lStringWidth0 = mCreditsFont.bitmap().getStringWidth(mLine0);
+		Rectangle HUDRect = pRenderState.hudCamera().boundingHUDRectange();
+
+		mTextureBatch.begin(pRenderState.hudCamera());
+		mTextureBatch.draw(0, 0, 800, 128, -400, HUDRect.top() + 20, 0.2f, 800, 128, 1f, mTitleLogoTexture);
+		mTextureBatch.end();
+
+		final String mLine1 = "Created by John Hampson (2017)";
+
 		final float lStringWidth1 = mCreditsFont.bitmap().getStringWidth(mLine1);
-		mCreditsFont.draw(mLine0, -lStringWidth0 / 2, 100, 0, 1f, 1f, 1f, 1f, 1f, -1);
-		mCreditsFont.draw(mLine1, -lStringWidth1 / 2, 130, 3f, 1f, 1f, 1f, 1f, 1f, -1);
+		mCreditsFont.draw(mLine1, -lStringWidth1 / 2, HUDRect.bottom() - 40, 0, 0f, 0f, 0f, 1f, 1f, -1);
+		mCreditsFont.draw(mLine1, -lStringWidth1 / 2, HUDRect.bottom() - 45, 3f, 1f, 1f, 1f, 1f, 1f, -1);
 
 		mCreditsFont.end();
 

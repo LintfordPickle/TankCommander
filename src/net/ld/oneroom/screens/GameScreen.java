@@ -5,6 +5,8 @@ import java.util.List;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
+import net.ld.library.cellworld.controllers.CircleTopDownController;
+import net.ld.library.cellworld.entities.CellEntity;
 import net.ld.library.controllers.camera.CameraZoomController;
 import net.ld.library.core.camera.ShakeCamera;
 import net.ld.library.core.graphics.ResourceManager;
@@ -54,12 +56,14 @@ public class GameScreen extends Screen {
 
 	// Controllers
 	private PlayerController mPlayerController;
-	
+
 	private CameraController mCameraController;
 	private CameraZoomController mCameraZoomController;
-	
+
 	private WorldController mWorldController;
 	private EnemyController mEnemyController;
+
+	private CircleTopDownController mTopDownController;
 
 	// Data / Model
 	private Player mPlayer;
@@ -127,6 +131,19 @@ public class GameScreen extends Screen {
 		mCameraZoomController = new CameraZoomController();
 		mWorldController = new WorldController();
 		mEnemyController = new EnemyController();
+		mTopDownController = new CircleTopDownController() {
+			@Override
+			protected void checkEntityCollisions(GameTime pGameTime, CellEntity pCellWorldEntity) {
+				return;
+
+			}
+
+			@Override
+			protected boolean hasLevelCollision(int pCellGridX, int pCellGridY) {
+				return false;
+			}
+
+		};
 
 		// Views
 		mWorldView = new WorldView();
@@ -149,12 +166,11 @@ public class GameScreen extends Screen {
 				for (int i = 0; i < lNumEnemies; i++) {
 					EnemyEntity lEnemyUnit = lEnemies.get(i);
 
-					if (!lEnemyUnit.isAlive)
+					if (!lEnemyUnit.isAlive())
 						continue;
 
 					float lMaxDist = 16f + lEnemyUnit.radius;
-					float lDistSqr = (lEnemyUnit.xx - pPart.x) * (lEnemyUnit.xx - pPart.x)
-							+ (lEnemyUnit.yy - pPart.y) * (lEnemyUnit.yy - pPart.y);
+					float lDistSqr = (lEnemyUnit.xx - pPart.x) * (lEnemyUnit.xx - pPart.x) + (lEnemyUnit.yy - pPart.y) * (lEnemyUnit.yy - pPart.y);
 
 					if (lDistSqr <= lMaxDist * lMaxDist) {
 						lEnemyUnit.health--;
@@ -184,12 +200,11 @@ public class GameScreen extends Screen {
 				for (int i = 0; i < lNumEnemies; i++) {
 					EnemyEntity lEnemyUnit = lEnemies.get(i);
 
-					if (!lEnemyUnit.isAlive)
+					if (!lEnemyUnit.isAlive())
 						continue;
 
 					float lMaxDist = 16f + lEnemyUnit.radius;
-					float lDistSqr = (lEnemyUnit.xx - pPart.x) * (lEnemyUnit.xx - pPart.x)
-							+ (lEnemyUnit.yy - pPart.y) * (lEnemyUnit.yy - pPart.y);
+					float lDistSqr = (lEnemyUnit.xx - pPart.x) * (lEnemyUnit.xx - pPart.x) + (lEnemyUnit.yy - pPart.y) * (lEnemyUnit.yy - pPart.y);
 
 					if (lDistSqr <= lMaxDist * lMaxDist) {
 						lEnemyUnit.health -= 10; // brown bread
@@ -225,18 +240,17 @@ public class GameScreen extends Screen {
 				for (int i = 0; i < lNumEnemies; i++) {
 					EnemyEntity lEnemyUnit = lEnemies.get(i);
 
-					if (!lEnemyUnit.isAlive)
+					if (!lEnemyUnit.isAlive())
 						continue;
 
 					float lMaxDist = 256f; // radius of blast
-					float lDistSqr = (lEnemyUnit.xx - pPart.x) * (lEnemyUnit.xx - pPart.x)
-							+ (lEnemyUnit.yy - pPart.y) * (lEnemyUnit.yy - pPart.y);
+					float lDistSqr = (lEnemyUnit.xx - pPart.x) * (lEnemyUnit.xx - pPart.x) + (lEnemyUnit.yy - pPart.y) * (lEnemyUnit.yy - pPart.y);
 
 					if (lDistSqr <= lMaxDist * lMaxDist) {
 						lEnemyUnit.health -= 10; // brown bread
 
-						float lDirX = (lEnemyUnit.x - 16) - pPart.x;
-						float lDirY = (lEnemyUnit.y - 16) - pPart.y;
+						float lDirX = (lEnemyUnit.xx - 16) - pPart.x;
+						float lDirY = (lEnemyUnit.yy - 16) - pPart.y;
 
 						float forceX = (float) Math.cos(lDirX) * 20f;
 						float forceY = (float) Math.sin(lDirY) * 20f;
@@ -267,8 +281,8 @@ public class GameScreen extends Screen {
 				if (mPlayer.tank().mGunnerFrontExt.mMannedBy != null) {
 
 					float rad = mPlayer.tank().mGunnerFrontExt.r;
-					float xx = (mPlayer.tank().x + mPlayer.tank().mGunnerFrontExt.x) - pPart.x;
-					float yy = (mPlayer.tank().y + mPlayer.tank().mGunnerFrontExt.y) - pPart.y;
+					float xx = (mPlayer.tank().xx + mPlayer.tank().mGunnerFrontExt.x) - pPart.x;
+					float yy = (mPlayer.tank().yy + mPlayer.tank().mGunnerFrontExt.y) - pPart.y;
 
 					if (Math.sqrt(xx * xx + yy * yy) <= (16f + rad)) {
 						TankCrew lCrew = mPlayer.tank().mGunnerFrontExt.mMannedBy;
@@ -288,8 +302,8 @@ public class GameScreen extends Screen {
 				if (mPlayer.tank().mGunnerBackExt.mMannedBy != null) {
 
 					float rad = mPlayer.tank().mGunnerBackExt.r;
-					float xx = (mPlayer.tank().x + mPlayer.tank().mGunnerBackExt.x) - pPart.x;
-					float yy = (mPlayer.tank().y + mPlayer.tank().mGunnerBackExt.y) - pPart.y;
+					float xx = (mPlayer.tank().xx + mPlayer.tank().mGunnerBackExt.x) - pPart.x;
+					float yy = (mPlayer.tank().yy + mPlayer.tank().mGunnerBackExt.y) - pPart.y;
 
 					if (Math.sqrt(xx * xx + yy * yy) <= (16f + rad)) {
 						TankCrew lCrew = mPlayer.tank().mGunnerBackExt.mMannedBy;
@@ -306,9 +320,8 @@ public class GameScreen extends Screen {
 				}
 
 				// Engine
-				if (Math.sqrt((mPlayer.tank().mEngine.x - pPart.x) * (mPlayer.tank().mEngine.x - pPart.x)
-						+ (mPlayer.tank().mEngine.y - pPart.y) * (mPlayer.tank().mEngine.y - pPart.y)) <= (16f
-								+ mPlayer.tank().mEngine.r)) {
+				if (Math.sqrt(
+						(mPlayer.tank().mEngine.x - pPart.x) * (mPlayer.tank().mEngine.x - pPart.x) + (mPlayer.tank().mEngine.y - pPart.y) * (mPlayer.tank().mEngine.y - pPart.y)) <= (16f + mPlayer.tank().mEngine.r)) {
 
 					// Damage hull (if heights match)
 					if (pPart.height < mPlayer.tank().mEngine.height) {
@@ -325,9 +338,8 @@ public class GameScreen extends Screen {
 				}
 
 				// Turret
-				if (Math.sqrt((mPlayer.tank().mTurret.x - pPart.x) * (mPlayer.tank().mTurret.x - pPart.x)
-						+ (mPlayer.tank().mTurret.y - pPart.y) * (mPlayer.tank().mTurret.y - pPart.y)) <= (16f
-								+ mPlayer.tank().mTurret.r)) {
+				if (Math.sqrt(
+						(mPlayer.tank().mTurret.x - pPart.x) * (mPlayer.tank().mTurret.x - pPart.x) + (mPlayer.tank().mTurret.y - pPart.y) * (mPlayer.tank().mTurret.y - pPart.y)) <= (16f + mPlayer.tank().mTurret.r)) {
 
 					// Damage hull (if heights match)
 					if (pPart.height < mPlayer.tank().mTurret.height) {
@@ -345,9 +357,7 @@ public class GameScreen extends Screen {
 				}
 
 				// Main hull
-				if (Math.sqrt((mPlayer.tank().x - pPart.x) * (mPlayer.tank().x - pPart.x)
-						+ (mPlayer.tank().y - pPart.y) * (mPlayer.tank().y - pPart.y)) <= (16f
-								+ mPlayer.tank().hitRadius)) {
+				if (Math.sqrt((mPlayer.tank().xx - pPart.x) * (mPlayer.tank().xx - pPart.x) + (mPlayer.tank().yy - pPart.y) * (mPlayer.tank().yy - pPart.y)) <= (16f + mPlayer.tank().hitRadius)) {
 
 					// Damage hull (if heights match)
 					if (pPart.height < mPlayer.tank().mHull.height) {
@@ -407,6 +417,7 @@ public class GameScreen extends Screen {
 		mCameraZoomController.setCamera(mScreenManager.gameCamera());
 		mWorldController.initialise(mGameWorld, mScreenManager.gameCamera());
 		mEnemyController.initialise(this, mEnemyManager, mPlayer.tank());
+		mTopDownController.initialise(mGameWorld.worldEntities());
 
 		mPlayerBullets.initialise(mScreenManager.gameCamera(), mGameWorld);
 		mPlayerRockets.initialise(mScreenManager.gameCamera(), mGameWorld);
@@ -430,8 +441,9 @@ public class GameScreen extends Screen {
 
 		// Setup the player
 		mGameWorld.addEntity(mPlayer.tank());
-		mPlayer.setStartPosition(0, 0);
-		mScreenManager.gameCamera().setAbsPosition(0, 0);
+
+		mPlayer.setStartPosition(128, 128);
+		mScreenManager.gameCamera().setAbsPosition(128, 128);
 
 		// Reset the camera
 
@@ -504,7 +516,7 @@ public class GameScreen extends Screen {
 		mHelpOverlay.handleInput(pInputState);
 		mPlayerController.handleInput(pInputState);
 		mCameraController.handleInput(pInputState);
-		
+
 		mCameraZoomController.handleInput(pInputState);
 
 	}
@@ -516,15 +528,18 @@ public class GameScreen extends Screen {
 		if (pCoveredByOtherScreen)
 			return;
 
+		// mPlayer.setStartPosition(512, 512);
+		// mScreenManager.gameCamera().setAbsPosition(128, 128);
+
 		mHudinterface.update(pGameTime);
 		mHelpOverlay.update(pGameTime);
 		mCameraController.update(pGameTime);
 
+		mTopDownController.update(pGameTime);
 		mPlayerController.update(pGameTime);
 		mPlayerView.update(pGameTime);
 		mPlayer.update(pGameTime);
 		mEnemyController.update(pGameTime);
-		mGameWorld.update(pGameTime);
 		mEnemyManager.update(pGameTime);
 
 		mPlayerBullets.update(pGameTime);
@@ -534,8 +549,6 @@ public class GameScreen extends Screen {
 		mSmokeParticles.update(pGameTime);
 
 		mCameraZoomController.update(pGameTime);
-		
-		mPlayer.update(pGameTime);
 
 		checkEndConditions(pGameTime);
 

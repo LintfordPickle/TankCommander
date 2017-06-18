@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.ld.library.cellworld.CellWorldEntity;
+import net.ld.library.cellworld.entities.CellEntity;
 import net.ld.library.core.camera.Camera;
 import net.ld.library.core.time.GameTime;
 import net.ld.oneroom.screens.GameScreen;
@@ -19,7 +19,7 @@ public class EnemyManager {
 
 	}
 
-	public class EnemyEntity extends CellWorldEntity {
+	public class EnemyEntity extends CellEntity {
 
 		// ---------------------------------------------
 		// Variables
@@ -40,6 +40,10 @@ public class EnemyManager {
 		// Properties
 		// ---------------------------------------------
 
+		public boolean isAlive() {
+			return health > 0;
+		}
+		
 		public ENEMY_STATE state() {
 			return mState;
 		}
@@ -69,8 +73,6 @@ public class EnemyManager {
 
 		@Override
 		public void update(GameTime pGameTime) {
-			super.update(pGameTime);
-
 			mShootTimer += pGameTime.elapseGameTime();
 
 		}
@@ -81,13 +83,11 @@ public class EnemyManager {
 			mShootTimer = 0;
 			mState = ENEMY_STATE.idle;
 			rotation = 0;
-			isAlive = true;
 
 		}
 
 		@Override
 		public void kill() {
-			super.kill();
 			health = 0;
 			mState = ENEMY_STATE.dead_Shot;
 			killTimer = 10000;
@@ -176,7 +176,7 @@ public class EnemyManager {
 		for (int i = 0; i < lUpdateCount; i++) {
 			EnemyEntity lEnemy = mEnemiesToUpdate.get(i);
 
-			if (!lEnemy.isAlive) {
+			if (!lEnemy.isAlive()) {
 				lEnemy.killTimer -= pGameTime.elapseGameTime();
 
 				if (lEnemy.killTimer <= 0) {
@@ -226,12 +226,9 @@ public class EnemyManager {
 	}
 
 	public EnemyEntity getFreeInstance() {
-		final int lPoolCount = mEnemyInstancePool.size();
-		for (int i = 0; i < lPoolCount; i++) {
-			if (!mEnemyInstancePool.get(i).isInUse()) {
-				return mEnemyInstancePool.get(i);
-			}
-
+		if(mEnemyInstancePool.size() > 0){
+			EnemyEntity lEntity = mEnemyInstancePool.remove(0);
+			return lEntity;
 		}
 
 		return allocateInstances(8);
@@ -245,8 +242,8 @@ public class EnemyManager {
 		}
 
 		mGameWorld.addEntity(lNewEnemy);
-		lNewEnemy.setCoordinate(pX, pY, GameScreen.CELL_SIZE);
-
+		
+		lNewEnemy.setPosition(pX, pY, GameScreen.CELL_SIZE);
 		lNewEnemy.init();
 
 		if (!mEnemies.contains(lNewEnemy)) {
@@ -255,18 +252,18 @@ public class EnemyManager {
 
 	}
 
-	public CellWorldEntity getClosestEnemy(float pX, float pY) {
-		CellWorldEntity lResult = null;
+	public CellEntity getClosestEnemy(float pX, float pY) {
+		CellEntity lResult = null;
 		float lShortestDist = Float.MAX_VALUE;
 
 		final int lEnemies = mEnemies.size();
 		for (int i = 0; i < lEnemies; i++) {
 			EnemyEntity lEnemy = mEnemies.get(i);
-			if (!lEnemy.isAlive || lEnemy.health <= 0)
+			if (!lEnemy.isAlive())
 				continue;
 
-			float xx = pX - lEnemy.x;
-			float yy = pY - lEnemy.y;
+			float xx = pX - lEnemy.xx;
+			float yy = pY - lEnemy.yy;
 
 			float dist = (xx * xx) + (yy * yy);
 			if (dist < lShortestDist * lShortestDist) {
@@ -278,18 +275,18 @@ public class EnemyManager {
 		return lResult;
 	}
 
-	public CellWorldEntity getClosestEnemy(float pX, float pY, float pMaxRange) {
-		CellWorldEntity lResult = null;
+	public CellEntity getClosestEnemy(float pX, float pY, float pMaxRange) {
+		CellEntity lResult = null;
 		float lShortestDist = pMaxRange;
 
 		final int lEnemies = mEnemies.size();
 		for (int i = 0; i < lEnemies; i++) {
 			EnemyEntity lEnemy = mEnemies.get(i);
-			if (!lEnemy.isAlive || lEnemy.health <= 0)
+			if (!lEnemy.isAlive())
 				continue;
 
-			float xx = lEnemy.x - pX;
-			float yy = lEnemy.y - pY;
+			float xx = lEnemy.xx - pX;
+			float yy = lEnemy.yy - pY;
 
 			float dist = (float)Math.sqrt((xx * xx) + (yy * yy));
 			if (dist < lShortestDist ) {

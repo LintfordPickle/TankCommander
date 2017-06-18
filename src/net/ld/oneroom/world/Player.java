@@ -159,7 +159,7 @@ public class Player {
 		mCrewToUpdate.clear();
 		final int lCrewCount = mCrew.size();
 		for (int i = 0; i < lCrewCount; i++) {
-			if (mCrew.get(i).isAlive)
+			if (mCrew.get(i).isAlive())
 				mCrewToUpdate.add(mCrew.get(i));
 
 		}
@@ -190,7 +190,7 @@ public class Player {
 		mTank.setGoingVector(pWorldX, pWorldY);
 		mTank.setShootingVector(pWorldX + 512, pWorldY);
 
-		mTank.setCoordinate(pWorldX, pWorldY, GameScreen.CELL_SIZE);
+		mTank.setPosition(pWorldX, pWorldY, GameScreen.CELL_SIZE);
 
 	}
 

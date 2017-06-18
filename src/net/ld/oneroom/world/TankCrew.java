@@ -1,9 +1,9 @@
 package net.ld.oneroom.world;
 
-import net.ld.library.cellworld.CellWorldEntity;
+import net.ld.library.cellworld.entities.CellEntity;
 import net.ld.library.core.time.GameTime;
 
-public class TankCrew extends CellWorldEntity {
+public class TankCrew extends CellEntity {
 
 	// ---------------------------------------------
 	// Constants
@@ -21,7 +21,7 @@ public class TankCrew extends CellWorldEntity {
 
 	public STANCE mSTANCE = STANCE.sitting;
 	public String name;
-	public CellWorldEntity attacking;
+	public CellEntity attacking;
 
 	public float mTimeBetweenShots = 400;
 	public float mShootTimer;
@@ -36,7 +36,7 @@ public class TankCrew extends CellWorldEntity {
 
 	public float health;
 	public float rot;
-
+	
 	// ---------------------------------------------
 	// Properties
 	// ---------------------------------------------
@@ -51,7 +51,6 @@ public class TankCrew extends CellWorldEntity {
 
 	public TankCrew(String pName) {
 		health = MAX_HEALTH;
-		isAlive = true;
 		name = pName;
 
 		System.out.println("recruited " + name + " to the crew ");
@@ -73,6 +72,18 @@ public class TankCrew extends CellWorldEntity {
 			}
 		}
 
+	}
+
+	@Override
+	public void init() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void kill() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

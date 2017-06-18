@@ -80,24 +80,24 @@ public class EnemyView {
 			// Enemy sprite
 			switch(lEnemy.state()){
 			case attacking:
-				mSpriteBatch.draw(96, 0, 32, 32, lEnemy.x, lEnemy.y, 0.15f, 64, 64, 1f, 1f, 1f, 1f, 0, 32, 32, 1f, 1f, mEntityTexture);
-				mSpriteBatch.draw(64, 256, 32, 32, lEnemy.x, lEnemy.y, 0.15f, 32, 32, 1f, 1f, 1f, 1f, lEnemy.rotation, 16f, 16f, SCALE, SCALE, mEntityTexture);
+				mSpriteBatch.draw(96, 0, 32, 32, lEnemy.xx, lEnemy.yy, 0.15f, 64, 64, 1f, 1f, 1f, 1f, 0, 32, 32, 1f, 1f, mEntityTexture);
+				mSpriteBatch.draw(64, 256, 32, 32, lEnemy.xx, lEnemy.yy, 0.15f, 32, 32, 1f, 1f, 1f, 1f, lEnemy.rotation, 16f, 16f, SCALE, SCALE, mEntityTexture);
 				break;
 				
 			case idle:
-				mSpriteBatch.draw(96, 0, 32, 32, lEnemy.x, lEnemy.y, 0.15f, 64, 64, 1f, 1f, 1f, 1f, 0, 32, 32, 1f, 1f, mEntityTexture);
-				mSpriteBatch.draw(64, 224, 32, 32, lEnemy.x, lEnemy.y, 0.15f, 32, 32, 1f, 1f, 1f, 1f, lEnemy.rotation, 16f, 16f, SCALE, SCALE, mEntityTexture);
+				mSpriteBatch.draw(96, 0, 32, 32, lEnemy.xx, lEnemy.yy, 0.15f, 64, 64, 1f, 1f, 1f, 1f, 0, 32, 32, 1f, 1f, mEntityTexture);
+				mSpriteBatch.draw(64, 224, 32, 32, lEnemy.xx, lEnemy.yy, 0.15f, 32, 32, 1f, 1f, 1f, 1f, lEnemy.rotation, 16f, 16f, SCALE, SCALE, mEntityTexture);
 				break;
 				
 			case dead_Shot:
 			case dead_squashed:
-				mSpriteBatch.draw(96, 0, 32, 32, lEnemy.x, lEnemy.y, 0.15f, 64, 64, 1f, 1f, 1f, 1f, 0, 32, 44, 1f, 1f, mEntityTexture);
-				mSpriteBatch.draw(64, 288, 32, 32, lEnemy.x, lEnemy.y, 0.15f, 32, 32, 1f, 1f, 1f, 1f, (float)Math.toRadians(45f), 16f, 16f, SCALE, SCALE, mEntityTexture);
+				mSpriteBatch.draw(96, 0, 32, 32, lEnemy.xx, lEnemy.yy, 0.15f, 64, 64, 1f, 1f, 1f, 1f, 0, 32, 44, 1f, 1f, mEntityTexture);
+				mSpriteBatch.draw(64, 288, 32, 32, lEnemy.xx, lEnemy.yy, 0.15f, 32, 32, 1f, 1f, 1f, 1f, (float)Math.toRadians(45f), 16f, 16f, SCALE, SCALE, mEntityTexture);
 				break;
 			
 			default:
-				mSpriteBatch.draw(96, 0, 32, 32, lEnemy.x, lEnemy.y, 0.15f, 64, 64, 1f, 1f, 1f, 1f, 0, 32, 32, 1f, 1f, mEntityTexture);
-				mSpriteBatch.draw(64, 224, 32, 32, lEnemy.x, lEnemy.y, 0.15f, 32, 32, 1f, 1f, 1f, 1f, lEnemy.rotation, 16f, 16f, SCALE, SCALE, mEntityTexture);
+				mSpriteBatch.draw(96, 0, 32, 32, lEnemy.xx, lEnemy.yy, 0.15f, 64, 64, 1f, 1f, 1f, 1f, 0, 32, 32, 1f, 1f, mEntityTexture);
+				mSpriteBatch.draw(64, 224, 32, 32, lEnemy.xx, lEnemy.yy, 0.15f, 32, 32, 1f, 1f, 1f, 1f, lEnemy.rotation, 16f, 16f, SCALE, SCALE, mEntityTexture);
 				break;
 			
 			}
@@ -105,7 +105,7 @@ public class EnemyView {
 			
 			
 			if(DRAW_COLLS)
-				mCircleBatch.draw(lEnemy.x, lEnemy.y, lEnemy.radius, 3f);
+				mCircleBatch.draw(lEnemy.xx, lEnemy.yy, lEnemy.radius, 3f);
 
 		}
 

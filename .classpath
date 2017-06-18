@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/LDLibrary"/>
-	<classpathentry kind="output" path="bin"/>
+  <classpathentry kind="src" path="src" including="**/*.java"/>
+  <classpathentry kind="output" path="target/classes"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="src" path="/LDLibrary"/>
+  <classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl/3.1.2/lwjgl-3.1.2.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl-egl/3.1.2/lwjgl-egl-3.1.2.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl-glfw/3.1.2/lwjgl-glfw-3.1.2.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl-jemalloc/3.1.2/lwjgl-jemalloc-3.1.2.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl-openal/3.1.2/lwjgl-openal-3.1.2.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl-opengl/3.1.2/lwjgl-opengl-3.1.2.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl-stb/3.1.2/lwjgl-stb-3.1.2.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl/3.1.2/lwjgl-3.1.2-natives-windows.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl-glfw/3.1.2/lwjgl-glfw-3.1.2-natives-windows.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl-jemalloc/3.1.2/lwjgl-jemalloc-3.1.2-natives-windows.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl-openal/3.1.2/lwjgl-openal-3.1.2-natives-windows.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl-opengl/3.1.2/lwjgl-opengl-3.1.2-natives-windows.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/lwjgl/lwjgl-stb/3.1.2/lwjgl-stb-3.1.2-natives-windows.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/google/code/gson/gson/2.8.1/gson-2.8.1.jar"/>
 </classpath>

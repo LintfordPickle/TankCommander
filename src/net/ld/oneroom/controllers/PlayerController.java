@@ -4,7 +4,7 @@ import java.util.Random;
 
 import org.lwjgl.glfw.GLFW;
 
-import net.ld.library.cellworld.CellWorldEntity;
+import net.ld.library.cellworld.entities.CellEntity;
 import net.ld.library.core.input.InputState;
 import net.ld.library.core.maths.Vector2f;
 import net.ld.library.core.time.GameTime;
@@ -212,8 +212,8 @@ public class PlayerController {
 				float sin_t = (float) Math.sin(mPlayerEntity.tank().heading());
 				float cos_t = (float) Math.cos(mPlayerEntity.tank().heading());
 
-				float lTankPosX = mPlayerEntity.tank().x;
-				float lTankPosY = mPlayerEntity.tank().y;
+				float lTankPosX = mPlayerEntity.tank().xx;
+				float lTankPosY = mPlayerEntity.tank().yy;
 
 				// Check if already engaged ??
 				float lMemberLocalX = lGunSlot.ox * cos_t - lGunSlot.oy * sin_t;
@@ -223,11 +223,10 @@ public class PlayerController {
 				float lWorldPosY = lTankPosY + lMemberLocalY;
 
 				// Face the closest enemy
-				CellWorldEntity lEnemy = mGameScreen.enemyManager().getClosestEnemy(lWorldPosX, lWorldPosY,
-						MAX_GUNNER_SIGHT_RANGE);
+				CellEntity lEnemy = mGameScreen.enemyManager().getClosestEnemy(lWorldPosX, lWorldPosY, MAX_GUNNER_SIGHT_RANGE);
 				if (lEnemy != null) {
-					float lToEnemyVecX = lEnemy.x - lWorldPosX;
-					float lToEnemyVecY = lEnemy.y - lWorldPosY;
+					float lToEnemyVecX = lEnemy.xx - lWorldPosX;
+					float lToEnemyVecY = lEnemy.yy - lWorldPosY;
 
 					float lShotAngle = (float) Math.atan2(lToEnemyVecY, lToEnemyVecX);
 					lMember.rot = lShotAngle + (float) Math.toRadians(-90);
@@ -273,8 +272,8 @@ public class PlayerController {
 				float sin_t = (float) Math.sin(mPlayerEntity.tank().heading());
 				float cos_t = (float) Math.cos(mPlayerEntity.tank().heading());
 
-				float lTankPosX = mPlayerEntity.tank().x;
-				float lTankPosY = mPlayerEntity.tank().y;
+				float lTankPosX = mPlayerEntity.tank().xx;
+				float lTankPosY = mPlayerEntity.tank().yy;
 
 				// Check if already engaged ??
 				float lMemberLocalX = lGunSlot.ox * cos_t - lGunSlot.oy * sin_t;
@@ -284,11 +283,10 @@ public class PlayerController {
 				float lWorldPosY = lTankPosY + lMemberLocalY;
 
 				// Face the closest enemy
-				CellWorldEntity lEnemy = mGameScreen.enemyManager().getClosestEnemy(lWorldPosX, lWorldPosY,
-						MAX_GUNNER_SIGHT_RANGE);
+				CellEntity lEnemy = mGameScreen.enemyManager().getClosestEnemy(lWorldPosX, lWorldPosY, MAX_GUNNER_SIGHT_RANGE);
 				if (lEnemy != null) {
-					float lToEnemyVecX = lEnemy.x - lWorldPosX;
-					float lToEnemyVecY = lEnemy.y - lWorldPosY;
+					float lToEnemyVecX = lEnemy.xx - lWorldPosX;
+					float lToEnemyVecY = lEnemy.yy - lWorldPosY;
 
 					float lShotAngle = (float) Math.atan2(lToEnemyVecY, lToEnemyVecX);
 					lMember.rot = lShotAngle + (float) Math.toRadians(-90);
@@ -334,8 +332,8 @@ public class PlayerController {
 
 		// The amount of throttle and turn speed to be applied will depend on
 		// the Fresnel term (faster if facing the target)
-		final float lHeadingVecX = mPlayerEntity.tank().goingVector().x - mPlayerEntity.tank().x;
-		final float lHeadingVecY = mPlayerEntity.tank().goingVector().y - mPlayerEntity.tank().y;
+		final float lHeadingVecX = mPlayerEntity.tank().goingVector().x - mPlayerEntity.tank().xx;
+		final float lHeadingVecY = mPlayerEntity.tank().goingVector().y - mPlayerEntity.tank().yy;
 
 		// 1. get the lengths of the two vectors (Fresnel must be normalized)
 		float lLengthTar0 = (float) Math.sqrt((lHeadingVecX * lHeadingVecX) + (lHeadingVecY * lHeadingVecY));
@@ -389,8 +387,8 @@ public class PlayerController {
 	private void updateTurrets(GameTime pGameTime) {
 		// Turret can only turn if manned and operational
 		if (/* mPlayerEntity.tank().mTurret.isOperational() && */ mPlayerEntity.tank().mGunnerInt.mMannedBy != null) {
-			final float lShootingVecX = mPlayerEntity.tank().shootingVector().x - mPlayerEntity.tank().x;
-			final float lShootingVecY = mPlayerEntity.tank().shootingVector().y - mPlayerEntity.tank().y;
+			final float lShootingVecX = mPlayerEntity.tank().shootingVector().x - mPlayerEntity.tank().xx;
+			final float lShootingVecY = mPlayerEntity.tank().shootingVector().y - mPlayerEntity.tank().yy;
 
 			float lTurretAngle = turnToFace(lShootingVecX, lShootingVecY, mPlayerEntity.tank().shootingRot(),
 					mPlayerEntity.tank().turrentTurnSpeed());
@@ -437,8 +435,8 @@ public class PlayerController {
 																								// -
 																								// mPlayerEntity.tank().y;
 
-					float xx = mPlayerEntity.tank().shootingVector().x - mPlayerEntity.tank().x;
-					float yy = mPlayerEntity.tank().shootingVector().y - mPlayerEntity.tank().y;
+					float xx = mPlayerEntity.tank().shootingVector().x - mPlayerEntity.tank().xx;
+					float yy = mPlayerEntity.tank().shootingVector().y - mPlayerEntity.tank().yy;
 
 					float lDistToEnemy = (float) Math.sqrt((xx * xx) + (yy * yy));
 
@@ -454,7 +452,7 @@ public class PlayerController {
 						life = MAX_TURRET_BULLET_LIFE;
 
 					System.out.println("life: " + life);
-					mGameScreen.playerRockets().addParticle(mPlayerEntity.tank().x, mPlayerEntity.tank().y,
+					mGameScreen.playerRockets().addParticle(mPlayerEntity.tank().xx, mPlayerEntity.tank().yy,
 							lShootingVecX, lShootingVecY, life);
 
 					// TODO:

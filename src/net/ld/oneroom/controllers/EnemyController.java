@@ -56,7 +56,7 @@ public class EnemyController {
 			EnemyEntity lEnemy = mEnemyManager.enemies().get(i);
 
 			// Waiting to be cleared
-			if (!lEnemy.isAlive) {
+			if (!lEnemy.isAlive()) {
 				continue;
 			}
 
@@ -66,14 +66,14 @@ public class EnemyController {
 				continue;
 			}
 
-			float exx = mPlayer.x - lEnemy.x;
-			float eyy = mPlayer.y - lEnemy.y;
+			float exx = mPlayer.xx - lEnemy.xx;
+			float eyy = mPlayer.yy - lEnemy.yy;
 
 			float dist = (float) Math.sqrt(exx * exx + eyy * eyy);
 
 			if (dist <= (16f + mPlayer.hitRadius)) {
 				lEnemy.state(ENEMY_STATE.dead_squashed);
-				lEnemy.isAlive = false;
+				lEnemy.kill();
 				continue;
 
 			}
@@ -122,11 +122,10 @@ public class EnemyController {
 	}
 
 	private void idle(EnemyEntity pEnemy) {
-		float lHeadingVectorX = mPlayer.x - pEnemy.x;
-		float lHeadingVectorY = mPlayer.y - pEnemy.y;
+		float lHeadingVectorX = mPlayer.xx - pEnemy.xx;
+		float lHeadingVectorY = mPlayer.yy - pEnemy.yy;
 
-		float lDistToPlayer = (float) Math
-				.sqrt((lHeadingVectorX * lHeadingVectorX) + (lHeadingVectorY * lHeadingVectorY));
+		float lDistToPlayer = (float) Math.sqrt((lHeadingVectorX * lHeadingVectorX) + (lHeadingVectorY * lHeadingVectorY));
 		lHeadingVectorX /= lDistToPlayer;
 		lHeadingVectorY /= lDistToPlayer;
 
@@ -142,6 +141,7 @@ public class EnemyController {
 		// Check transition qualifiers
 		if (lDistToPlayer < 2300f) {
 			pEnemy.state(ENEMY_STATE.chasing);
+
 		}
 
 	}
@@ -155,11 +155,10 @@ public class EnemyController {
 	}
 
 	private void attack(EnemyEntity pEnemy) {
-		float lHeadingVectorX = mPlayer.x - pEnemy.x;
-		float lHeadingVectorY = mPlayer.y - pEnemy.y;
+		float lHeadingVectorX = mPlayer.xx - pEnemy.xx;
+		float lHeadingVectorY = mPlayer.yy - pEnemy.yy;
 
-		float lDistToPlayer = (float) Math
-				.sqrt((lHeadingVectorX * lHeadingVectorX) + (lHeadingVectorY * lHeadingVectorY));
+		float lDistToPlayer = (float) Math.sqrt((lHeadingVectorX * lHeadingVectorX) + (lHeadingVectorY * lHeadingVectorY));
 
 		// Check transition condition
 		if (lDistToPlayer > MINIMUM_SHOOTING_RANGE) {
@@ -198,7 +197,7 @@ public class EnemyController {
 			float lShootVecX = (float) Math.cos(lShotAng) * BULLET_SPEED;
 			float lShootVecY = (float) Math.sin(lShotAng) * BULLET_SPEED;
 
-			mGameScreen.enemyBullets().addParticle(pEnemy.x, pEnemy.y, lShootVecX, lShootVecY, 1500f);
+			mGameScreen.enemyBullets().addParticle(pEnemy.xx, pEnemy.yy, lShootVecX, lShootVecY, 1500f);
 
 			pEnemy.mCurrentShotNum++;
 			if (pEnemy.mCurrentShotNum >= pEnemy.mShotsPerBurst + 1) {
@@ -212,15 +211,14 @@ public class EnemyController {
 	}
 
 	private void chase(EnemyEntity pEnemy) {
-		float lHeadingVectorX = mPlayer.x - pEnemy.x;
-		float lHeadingVectorY = mPlayer.y - pEnemy.y;
+		float lHeadingVectorX = mPlayer.xx - pEnemy.xx;
+		float lHeadingVectorY = mPlayer.yy - pEnemy.yy;
 
 		pEnemy.rotation = (float) Math.atan2(lHeadingVectorY, lHeadingVectorX) + (float) Math.toRadians(-90);
 
 		final float l = 0.45f;
 
-		float lDistToPlayer = (float) Math
-				.sqrt((lHeadingVectorX * lHeadingVectorX) + (lHeadingVectorY * lHeadingVectorY));
+		float lDistToPlayer = (float) Math.sqrt((lHeadingVectorX * lHeadingVectorX) + (lHeadingVectorY * lHeadingVectorY));
 		lHeadingVectorX /= lDistToPlayer;
 		lHeadingVectorY /= lDistToPlayer;
 

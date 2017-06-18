@@ -280,17 +280,19 @@ public class HUDInterface extends Rectangle {
 		mEngine.currentAmount(mPlayer.tank().mEngine.health);
 		mArmour.currentAmount(mPlayer.tank().mHull.health);
 		mTurret.currentAmount(mPlayer.tank().mTurret.health);
-		
+
 		final int lPortraitCount = mPortraits.size();
 		for (int i = 0; i < lPortraitCount; i++) {
 			CrewPortrait lPortrait = mPortraits.get(i);
-			
-			if(lPortrait.mTankComponent.mMannedBy != null)
-			{
-				if(!lPortrait.mTankComponent.mMannedBy.isAlive){
+
+			if (lPortrait.mTankComponent.mMannedBy != null) {
+				if (!lPortrait.mTankComponent.mMannedBy.isAlive()) {
 					lPortrait.mTankComponent.mMannedBy = null;
+
 				}
+
 			}
+
 		}
 
 	}
@@ -309,7 +311,7 @@ public class HUDInterface extends Rectangle {
 		mSpriteBatch.end();
 
 		drawErrors(pRenderState);
-		
+
 		drawRoster(pRenderState);
 
 		drawStateBars(pRenderState);
@@ -327,43 +329,40 @@ public class HUDInterface extends Rectangle {
 
 	}
 
-	private void drawErrors(RenderState pRenderState){
+	private void drawErrors(RenderState pRenderState) {
 		Rectangle lHUDrect = pRenderState.hudCamera().boundingRectangle();
 
 		mHUDFont.begin(pRenderState.hudCamera());
 		mSpriteBatch.begin(pRenderState.hudCamera());
-		
-		
-		if (mPlayer.tank().mEngine.health < mPlayer.tank().mTurret.operational_health ) {
+
+		if (mPlayer.tank().mEngine.health < mPlayer.tank().mTurret.operational_health) {
 			mSpriteBatch.draw(256, 0, 32, 32, lHUDrect.right() - HUD_WIDTH - 16 - 32, lHUDrect.bottom() - 128f, 1.95f, 32, 32, 1f, mHUDTexture);
 			mHUDFont.draw("Engine Damaged", lHUDrect.right() - HUD_WIDTH - 16 - 162, lHUDrect.bottom() - 114f, 1.96f, 1f, 1f, 1f, 1f, 1.0f, -1);
 		}
-		
-		if (mPlayer.tank().mHull.health < mPlayer.tank().mHull.max_health - 15 ) {
+
+		if (mPlayer.tank().mHull.health < mPlayer.tank().mHull.max_health - 15) {
 			mSpriteBatch.draw(256, 0, 32, 32, lHUDrect.right() - HUD_WIDTH - 16 - 32, lHUDrect.bottom() - 160f, 1.95f, 32, 32, 1f, mHUDTexture);
 			mHUDFont.draw("Hull Critical", lHUDrect.right() - HUD_WIDTH - 16 - 166, lHUDrect.bottom() - 150f, 1.96f, 1f, 1f, 1f, 1f, 1.0f, -1);
-		}else
-		
-		if (mPlayer.tank().mHull.health < mPlayer.tank().mHull.max_health - 10 ) {
+		} else
+
+		if (mPlayer.tank().mHull.health < mPlayer.tank().mHull.max_health - 10) {
 			mSpriteBatch.draw(256, 0, 32, 32, lHUDrect.right() - HUD_WIDTH - 16 - 32, lHUDrect.bottom() - 160f, 1.95f, 32, 32, 1f, mHUDTexture);
 			mHUDFont.draw("Hull Damaged", lHUDrect.right() - HUD_WIDTH - 16 - 166, lHUDrect.bottom() - 150f, 1.96f, 1f, 1f, 1f, 1f, 1.0f, -1);
-		}  
-		
-		if (mPlayer.tank().mTurret.health < mPlayer.tank().mTurret.operational_health ) {
+		}
+
+		if (mPlayer.tank().mTurret.health < mPlayer.tank().mTurret.operational_health) {
 			mSpriteBatch.draw(256, 0, 32, 32, lHUDrect.right() - HUD_WIDTH - 16 - 32, lHUDrect.bottom() - 96f, 1.95f, 32, 32, 1f, mHUDTexture);
 			mHUDFont.draw("Turret Destroyed", lHUDrect.right() - HUD_WIDTH - 16 - 180, lHUDrect.bottom() - 84f, 1.96f, 1f, 1f, 1f, 1f, 1.0f, -1);
-		} else if (mPlayer.tank().mTurret.health < mPlayer.tank().mTurret.max_health - 10 ) {
+		} else if (mPlayer.tank().mTurret.health < mPlayer.tank().mTurret.max_health - 10) {
 			mSpriteBatch.draw(256, 0, 32, 32, lHUDrect.right() - HUD_WIDTH - 16 - 32, lHUDrect.bottom() - 96f, 1.95f, 32, 32, 1f, mHUDTexture);
 			mHUDFont.draw("Turret Damaged", lHUDrect.right() - HUD_WIDTH - 16 - 166, lHUDrect.bottom() - 84f, 1.96f, 1f, 1f, 1f, 1f, 1.0f, -1);
-		} 
-		
-		if (mPlayer.tank().fuelAmt < 10 ) {
+		}
+
+		if (mPlayer.tank().fuelAmt < 10) {
 			mSpriteBatch.draw(256, 0, 32, 32, lHUDrect.right() - HUD_WIDTH - 16 - 32, lHUDrect.bottom() - 64f, 1.95f, 32, 32, 1f, mHUDTexture);
 			mHUDFont.draw("Out of Fuel", lHUDrect.right() - HUD_WIDTH - 16 - 128, lHUDrect.bottom() - 51, 1.96f, 1f, 1f, 1f, 1f, 1.0f, -1);
 		}
-		
-		
-		
+
 		if (mPlayer.tank().turretReloaded) {
 			final float lWidth = 192;
 
@@ -378,12 +377,11 @@ public class HUDInterface extends Rectangle {
 			mSpriteBatch.draw(0, 160, lWidth, 32, lHUDrect.centerX() - 64 - lWidth / 2, lHUDrect.bottom() - 64f, 1.95f, lWidth, 32, 1f, mHUDTexture);
 			mHUDFont.draw("[SPACE]", lHUDrect.centerX() - 85, lHUDrect.bottom() - 64f + 9f, 1.96f, 1f, 1f, 1f, 1f, 1.0f, -1);
 		}
-		
-		
+
 		mSpriteBatch.end();
 		mHUDFont.end();
 	}
-	
+
 	private void drawResources(RenderState pRenderState) {
 
 		Rectangle lHUDrect = pRenderState.hudCamera().boundingRectangle();

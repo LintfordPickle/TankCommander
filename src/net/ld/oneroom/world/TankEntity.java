@@ -1,12 +1,12 @@
 package net.ld.oneroom.world;
 
-import net.ld.library.cellworld.CellWorldEntity;
+import net.ld.library.cellworld.entities.CellEntity;
 import net.ld.library.core.maths.Vector2f;
 import net.ld.library.core.time.GameTime;
 import net.ld.oneroom.controllers.PlayerController;
 import net.ld.oneroom.world.TankCrew.STANCE;
 
-public class TankEntity extends CellWorldEntity {
+public class TankEntity extends CellEntity {
 
 	public class TankComponent {
 
@@ -69,8 +69,8 @@ public class TankEntity extends CellWorldEntity {
 		public void updateManned(GameTime pGameTime) {
 			//
 			if (mMannedBy != null) {
-				mMannedBy.x = ox;
-				mMannedBy.y = oy;
+				mMannedBy.xx = ox;
+				mMannedBy.yy = oy;
 
 			}
 		}
@@ -125,7 +125,7 @@ public class TankEntity extends CellWorldEntity {
 
 	private float mTankTurnSpeed = 0.02f;
 	private float mTurretTurnSpeed = 0.015f;
-	private float mTankMaxSpeed = 11f;
+	private float mTankMaxSpeed = 6f;
 	public float fuelAmt;
 	public float hitRadius = 95f;
 	public boolean targetTooClose;
@@ -231,8 +231,6 @@ public class TankEntity extends CellWorldEntity {
 		coll_repel_precedence = 2;
 		fuelAmt = MAX_FUEL_AMT;
 
-		init();
-
 		mEngine = new TankComponent(this, "Engine", 30f, 0.2f);
 		mTurret = new TankComponent(this, "Turrent", 30f, 0.3f);
 		mRocketStore = new TankComponent(this, "Engine", MAX_ROCKETS, 0.08f); // 24 rockets ^^
@@ -245,6 +243,8 @@ public class TankEntity extends CellWorldEntity {
 		mGunnerFrontExt = new TankComponent(this, "GunnerExt1", 60f, 2f);
 		mGunnerBackExt = new TankComponent(this, "GunnerExt2", 60f, 2f);
 
+		health = 100;
+
 		setupComponents();
 
 	}
@@ -253,10 +253,7 @@ public class TankEntity extends CellWorldEntity {
 	// Core-Methods
 	// ---------------------------------------------
 
-	@Override
 	public void update(GameTime pGameTime) {
-		super.update(pGameTime);
-
 		// Update the relative positions of the components
 		float cos_t = (float) (Math.cos(mHeadingRot));
 		float sin_t = (float) (Math.sin(mHeadingRot));
@@ -265,25 +262,25 @@ public class TankEntity extends CellWorldEntity {
 		mEngine.oy = -60f;
 
 		// keep the components aligned with the body (regarding rotations)
-		mRocketStore.x = x + mRocketStore.ox * cos_t - mRocketStore.oy * sin_t;
-		mRocketStore.y = y + mRocketStore.ox * sin_t + mRocketStore.oy * cos_t;
+		mRocketStore.x = xx + mRocketStore.ox * cos_t - mRocketStore.oy * sin_t;
+		mRocketStore.y = yy + mRocketStore.ox * sin_t + mRocketStore.oy * cos_t;
 
-		mEngine.x = x + mEngine.ox * cos_t - mEngine.oy * sin_t;
-		mEngine.y = y + mEngine.ox * sin_t + mEngine.oy * cos_t;
+		mEngine.x = xx + mEngine.ox * cos_t - mEngine.oy * sin_t;
+		mEngine.y = yy + mEngine.ox * sin_t + mEngine.oy * cos_t;
 
 		float cos_s = (float) (Math.cos(mShootingRot));
 		float sin_s = (float) (Math.sin(mShootingRot));
 
-		mTurret.x = ((x + mTurret.ox * cos_s - mTurret.oy * sin_s));
-		mTurret.y = ((y + mTurret.ox * sin_s + mTurret.oy * cos_s));
-		
+		mTurret.x = ((xx + mTurret.ox * cos_s - mTurret.oy * sin_s));
+		mTurret.y = ((yy + mTurret.ox * sin_s + mTurret.oy * cos_s));
+
 		mGunnerInt.ox = 30;
 		mGunnerInt.oy = -53;
-	
+
 		if (mEngine.mMannedBy != null) {
 			mEngine.mMannedBy.mSTANCE = STANCE.standing;
-			mEngine.mMannedBy.x = -45f;
-			mEngine.mMannedBy.y = -50;
+			mEngine.mMannedBy.xx = -45f;
+			mEngine.mMannedBy.yy = -50;
 		}
 
 		if (mCommander.mMannedBy != null) {
@@ -315,17 +312,17 @@ public class TankEntity extends CellWorldEntity {
 			mGunnerBackExt.mMannedBy.mSTANCE = STANCE.prone;
 			mGunnerBackExt.updateManned(pGameTime);
 		}
-		
+
 		if (mTurret.mMannedBy != null) {
 			mTurret.mMannedBy.mSTANCE = STANCE.sitting;
-			mTurret.mMannedBy.x = 5;
-			mTurret.mMannedBy.y = -10;
+			mTurret.mMannedBy.xx = 5;
+			mTurret.mMannedBy.yy = -10;
 		}
-		
+
 		if (mHull.mMannedBy != null) {
 			mHull.mMannedBy.mSTANCE = STANCE.sitting;
-			mHull.mMannedBy.x = 30;
-			mHull.mMannedBy.y = -10;
+			mHull.mMannedBy.xx = 30;
+			mHull.mMannedBy.yy = -10;
 		}
 
 		turretXOff *= 0.95f;
@@ -415,6 +412,18 @@ public class TankEntity extends CellWorldEntity {
 		mGunnerBackExt.r = 16;
 		mGunnerBackExt.isManable = true;
 		mGunnerBackExt.isFixable = false;
+
+	}
+
+	@Override
+	public void init() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void kill() {
+		// TODO Auto-generated method stub
 
 	}
 

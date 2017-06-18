@@ -96,8 +96,8 @@ public class PlayerView {
 		if (mPlayerEntity == null)
 			return;
 
-		final float lPlayerPositionX = mPlayerEntity.tank().x;
-		final float lPlayerPositionY = mPlayerEntity.tank().y;
+		final float lPlayerPositionX = mPlayerEntity.tank().xx;
+		final float lPlayerPositionY = mPlayerEntity.tank().yy;
 
 		drawTankLower(pRenderState);
 
@@ -141,15 +141,15 @@ public class PlayerView {
 			TankCrew lMember = lMotleyCrew.get(i);
 
 			// Draw the crew member at the station he is assigned too
-			float offX = lMember.x;
-			float offY = lMember.y;
+			float offX = lMember.xx;
+			float offY = lMember.yy;
 
 			float lRot = mPlayerEntity.tank().heading();
 			float cos_t = (float) Math.cos(lRot);
 			float sin_t = (float) Math.sin(lRot);
 
-			float lstationX = mPlayerEntity.tank().x + offX * cos_t - offY * sin_t;
-			float lstationY = mPlayerEntity.tank().y + offX * sin_t + offY * cos_t;
+			float lstationX = mPlayerEntity.tank().xx + offX * cos_t - offY * sin_t;
+			float lstationY = mPlayerEntity.tank().yy + offX * sin_t + offY * cos_t;
 
 			final float SCALE = 1.5f;
 
@@ -206,8 +206,8 @@ public class PlayerView {
 		mSpriteBatch.draw(0, 0, 32, 32, lShootingX - TILE_SIZE / 2, lShootingY - TILE_SIZE / 2, 0.2f, TILE_SIZE,
 				TILE_SIZE, 1f, mEntityTexture);
 
-		final float lPlayerPositionX = mPlayerEntity.tank().x + mPlayerEntity.tank().hullXOff;
-		final float lPlayerPositionY = mPlayerEntity.tank().y + mPlayerEntity.tank().hullYOff;
+		final float lPlayerPositionX = mPlayerEntity.tank().xx + mPlayerEntity.tank().hullXOff;
+		final float lPlayerPositionY = mPlayerEntity.tank().yy + mPlayerEntity.tank().hullYOff;
 
 		// Render the player
 		final float TANK_SIZE_X = 128;
@@ -364,8 +364,8 @@ public class PlayerView {
 		mSpriteBatch.draw(0, 0, 32, 32, lShootingX - TILE_SIZE / 2, lShootingY - TILE_SIZE / 2, 0.2f, TILE_SIZE,
 				TILE_SIZE, 1f, mEntityTexture);
 
-		final float lPlayerPositionX = mPlayerEntity.tank().x;
-		final float lPlayerPositionY = mPlayerEntity.tank().y;
+		final float lPlayerPositionX = mPlayerEntity.tank().xx;
+		final float lPlayerPositionY = mPlayerEntity.tank().yy;
 
 		// Render the player
 		final float TANK_SIZE_X = 128;

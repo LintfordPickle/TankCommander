@@ -16,7 +16,7 @@ public class GameBase extends LWJGLCore {
 	// Variables
 	// ---------------------------------------------
 
-	ScreenManager mScreenManager;
+	private ScreenManager mScreenManager;
 
 	// ---------------------------------------------
 	// Constructor
