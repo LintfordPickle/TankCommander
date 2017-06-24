@@ -22,20 +22,6 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.0.2</version>
-				<configuration>
-					<archive>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<mainClass>net.ld.oneroom.GameBase</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin>
-
 			<!-- Copy the game resources next to the jar -->
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
