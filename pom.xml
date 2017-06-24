@@ -48,7 +48,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/res</outputDirectory>
+							<outputDirectory>${basedir}/dist/res</outputDirectory>
 							<encoding>UTF-8</encoding>
 							<nonFilteredFileExtensions>
 								<nonFilteredFileExtension>ttf</nonFilteredFileExtension>
@@ -84,6 +84,8 @@
 									<mainClass>net.ld.oneroom.GameBase</mainClass>
 								</transformer>
 							</transformers>
+							<outputDirectory>${basedir}/dist</outputDirectory>
+							<outputFile>${basedir}/dist/${project.name}.jar</outputFile>
 						</configuration>
 					</execution>
 				</executions>
